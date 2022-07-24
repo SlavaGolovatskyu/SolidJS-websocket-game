@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import styles from './App.module.css';
-import { useStore } from './store';
+import useStore from './hooks/useStore';
 import { increment, decrement } from './store/reducers/counter';
 
 const App = () => {
