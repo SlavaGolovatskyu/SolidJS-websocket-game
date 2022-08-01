@@ -1,0 +1,43 @@
+$main_color: linear-gradient(180deg, #f4f7ff 0%, #f1f5ff 100%);
+$lighten_red: #ffd7d7;
+$lighten_blue: #3a79ff;
+
+.container {
+  width: 100%;
+  height: 50px;
+  background: $main_color;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px 0;
+
+  a {
+    text-decoration: none;
+  }
+
+  .item {
+    background: $lighten_red;
+    border-radius: 2px;
+    padding: 13px 15px;
+    text-decoration: none;
+    color: #d43f3f;
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 700;
+    font-style: normal;
+    transition: 0.5s all ease-in-out;
+
+    &.active {
+      background: #d2e1ff;
+      color: $lighten_blue;
+
+      &:hover {
+        background: lighten($lighten_blue, 23%);
+      }
+    }
+
+    &:hover {
+      background: lighten($lighten_red, 3%);
+    }
+  }
+}

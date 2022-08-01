@@ -1,0 +1,17 @@
+.custom_checkbox {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  flex-shrink: 0;
+  flex-grow: 0;
+  border: 1px solid #adb5bd;
+  margin-right: 0.5em;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50% 50%;
+  cursor: pointer;
+}
+
+.active {
+  background: #0b76ef;
+}

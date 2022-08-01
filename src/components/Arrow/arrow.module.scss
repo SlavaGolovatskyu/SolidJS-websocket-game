@@ -1,0 +1,48 @@
+.container {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s all ease-in-out;
+
+  &:hover {
+    background: lighten(silver, 10%);
+    cursor: pointer;
+  }
+}
+
+.arrow {
+  border: solid lighten(black, 40%);
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 5px;
+  position: relative;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  position: absolute;
+  right: 19px;
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  position: absolute;
+  left: 19px;
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}

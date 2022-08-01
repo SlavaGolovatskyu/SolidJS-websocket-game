@@ -8,7 +8,9 @@ const useStore = (
   select: (state: RootState) => unknown,
   equality: boolean = true,
 ): any[] => {
-  const [selected, setSelected] = createSignal(select(store.getState()));
+  const [selected, setSelected] = createSignal(
+    select(store.getState()),
+  );
 
   const unsubscribe = store.subscribe(() => {
     const updateSelected = select(store.getState());
