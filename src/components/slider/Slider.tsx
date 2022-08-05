@@ -21,7 +21,9 @@ type SliderProps = {
 
 export const Slider = (props: SliderProps) => {
   const [currentSlideIdx, setCurrentSlideIdx] = createSignal<number>(0);
-  const [isChanged, setIsChanged] = createSignal<boolean>(true);
+  const [isShow, setIsShow] = createSignal<boolean>(true);
+  const [isCanSwipeToTheNext, setIsCanSwipeToTheNext] =
+    createSignal<boolean>(true);
 
   const transition = props.transition || 500;
 
@@ -33,11 +35,14 @@ export const Slider = (props: SliderProps) => {
   };
 
   createEffect(() => {
-    !isChanged() && setTimeout(() => setIsChanged(true), transition);
+    if (!isShow()) {
+      setTimeout(() => setIsShow(true), transition);
+      setTimeout(() => setIsCanSwipeToTheNext(true), transition * 2);
+    }
   });
 
   const onLeftArrow = () => {
-    if (!isChanged()) return;
+    if (!isCanSwipeToTheNext()) return;
 
     batch(() => {
       if (currentSlideIdx() === 0) {
@@ -46,12 +51,13 @@ export const Slider = (props: SliderProps) => {
         setCurrentSlideIdx(currentSlideIdx() - 1);
       }
 
-      setIsChanged(false);
+      setIsShow(false);
+      setIsCanSwipeToTheNext(false);
     });
   };
 
   const onRightArrow = () => {
-    if (!isChanged()) return;
+    if (!isCanSwipeToTheNext()) return;
 
     batch(() => {
       if (currentSlideIdx() === props.elements.length - 1) {
@@ -60,33 +66,40 @@ export const Slider = (props: SliderProps) => {
         setCurrentSlideIdx(currentSlideIdx() + 1);
       }
 
-      setIsChanged(false);
+      setIsShow(false);
+      setIsCanSwipeToTheNext(false);
     });
   };
 
   const onChangeNumberOfSlider = (index: number) => {
-    if (!isChanged()) return;
+    if (!isCanSwipeToTheNext()) return;
     if (index === currentSlideIdx()) return;
 
     batch(() => {
       setCurrentSlideIdx(index);
-      setIsChanged(false);
+      setIsShow(false);
+      setIsCanSwipeToTheNext(false);
     });
   };
 
   return (
     <div class={styles.container}>
-      <div class={styles.left_arrow}>
-        <Arrow direction={ArrowDirections.LEFT} onClick={onLeftArrow} />
-      </div>
-      <div class={styles.right_arrow}>
-        <Arrow
-          direction={ArrowDirections.RIGHT}
-          onClick={onRightArrow}
-        />
-      </div>
+      <Show when={props.elements.length > 1}>
+        <div class={styles.left_arrow}>
+          <Arrow
+            direction={ArrowDirections.LEFT}
+            onClick={onLeftArrow}
+          />
+        </div>
+        <div class={styles.right_arrow}>
+          <Arrow
+            direction={ArrowDirections.RIGHT}
+            onClick={onRightArrow}
+          />
+        </div>
+      </Show>
       <Presence exitBeforeEnter>
-        <Show when={isChanged()}>
+        <Show when={isShow()}>
           <Motion.div
             animate={{ opacity: [0, 1], scale: [0, 1] }}
             class={styles.content}
@@ -96,13 +109,13 @@ export const Slider = (props: SliderProps) => {
             }}
             exit={{ opacity: [1, 0], scale: [1, 0] }}>
             <div class={styles.content__title}>
-              {props?.elements[currentSlideIdx()]?.title}
+              {props.elements[currentSlideIdx()]?.title}
             </div>
             <div class={styles.content__subtitle}>
-              {props?.elements[currentSlideIdx()]?.subtitle}
+              {props.elements[currentSlideIdx()]?.subtitle}
             </div>
             <div class={styles.content__text}>
-              {props?.elements[currentSlideIdx()]?.text}
+              {props.elements[currentSlideIdx()]?.text}
             </div>
           </Motion.div>
         </Show>

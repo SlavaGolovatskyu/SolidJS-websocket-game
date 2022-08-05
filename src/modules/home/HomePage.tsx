@@ -32,7 +32,7 @@ const test = [
 export const HomePage = () => {
   return (
     <div class={styles.container}>
-      <Slider elements={test} transition={300} />
+      <Slider elements={test} transition={400} />
     </div>
   );
 };
