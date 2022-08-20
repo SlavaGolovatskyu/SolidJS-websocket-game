@@ -49,20 +49,6 @@ export const Slider = (props: SliderProps) => {
   const toPercentage = 1000;
   const animateTransition = transition / toPercentage;
 
-  createEffect(() => {
-    if (!isShow()) {
-      setTimeout(() => setIsShow(true), transition);
-      setTimeout(
-        () => setIsCanSwipeToTheNext(true),
-        timeTransitionForCloseAndOpen,
-      );
-    }
-  });
-
-  const test: null | Directions | object = {
-    current: { direction: null },
-  };
-
   const hideSlide = () => {
     setIsShow(false);
     setIsCanSwipeToTheNext(false);
@@ -78,6 +64,7 @@ export const Slider = (props: SliderProps) => {
         setCurrentSlideIdx(currentSlideIdx() - 1);
       }
 
+      setCurrentDirection(Directions.LEFT);
       hideSlide();
     });
   };
@@ -92,6 +79,7 @@ export const Slider = (props: SliderProps) => {
         setCurrentSlideIdx(currentSlideIdx() + 1);
       }
 
+      setCurrentDirection(Directions.RIGHT);
       hideSlide();
     });
   };
@@ -100,8 +88,7 @@ export const Slider = (props: SliderProps) => {
     if (!isCanSwipeToTheNext()) return;
     if (index === currentSlideIdx()) return;
     if (sliderType === SliderType.BETWEEN) {
-      test.current.direction =
-        currentSlideIdx() < index ? Directions.RIGHT : Directions.LEFT;
+      setCurrentDirection(currentSlideIdx() < index ? Directions.RIGHT : Directions.LEFT);
     }
 
     batch(() => {
@@ -110,29 +97,29 @@ export const Slider = (props: SliderProps) => {
     });
   };
 
+  createEffect(() => {
+    if (!isShow()) {
+      setTimeout(() => setIsShow(true), transition);
+      setTimeout(
+        () => setIsCanSwipeToTheNext(true),
+        timeTransitionForCloseAndOpen,
+      );
+    }
+  });
+
   return (
     <div class={styles.container}>
       <Show when={props.elements.length > 1}>
         <div class={styles.left_arrow}>
           <Arrow
             direction={ArrowDirections.LEFT}
-            onClick={() => {
-              if (sliderType === SliderType.BETWEEN) {
-                test.current.direction = Directions.LEFT;
-              }
-              onLeftArrow();
-            }}
+            onClick={onLeftArrow}
           />
         </div>
         <div class={styles.right_arrow}>
           <Arrow
             direction={ArrowDirections.RIGHT}
-            onClick={() => {
-              if (sliderType === SliderType.BETWEEN) {
-                test.current.direction = Directions.RIGHT;
-              }
-              onRightArrow();
-            }}
+            onClick={onRightArrow}
           />
         </div>
       </Show>
@@ -148,30 +135,32 @@ export const Slider = (props: SliderProps) => {
       </Show>
       <Show when={sliderType === SliderType.BETWEEN}>
         <Presence exitBeforeEnter>
-          <Rerun on={currentSlideIdx()}>
-            <SliderCard
-              slideData={props.elements[currentSlideIdx()]}
-              duration={animateTransition}
-              initial={{
-                opacity: 0,
-                x:
-                  test.current.direction === Directions.LEFT
-                    ? -xRange
-                    : xRange,
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-              }}
-              exit={{
-                opacity: 0,
-                x:
-                  test.current.direction === Directions.LEFT
-                    ? xRange
-                    : -xRange,
-              }}
-            />
-          </Rerun>
+          <Show when={isShow()}>
+            <Rerun on={isCurrentDirectionLeft()}>
+              <SliderCard
+                slideData={props.elements[currentSlideIdx()]}
+                duration={animateTransition}
+                initial={{
+                  opacity: 0,
+                  x:
+                    isCurrentDirectionLeft()
+                      ? -xRange
+                      : xRange,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  x:
+                    isCurrentDirectionLeft()
+                      ? xRange
+                      : -xRange,
+                }}
+              />
+            </Rerun>
+          </Show>
         </Presence>
       </Show>
       <div class={styles.count_of_items}>

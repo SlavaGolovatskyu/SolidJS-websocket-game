@@ -2,12 +2,14 @@
   width: 90%;
   height: 90%;
   margin: 0 auto;
+  margin: 20px;
   background: yellow;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 20px;
+  text-align: center;
 }
 
 .content__title {
