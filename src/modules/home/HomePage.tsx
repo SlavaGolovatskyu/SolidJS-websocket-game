@@ -1,3 +1,4 @@
+import { SliderType } from '../../components/slider/models/models';
 import { Slider } from '../../components/slider/Slider';
 import styles from './home.module.scss';
 
@@ -32,7 +33,11 @@ const test = [
 export const HomePage = () => {
   return (
     <div class={styles.container}>
-      <Slider elements={test} transition={400} />
+      <Slider
+        elements={test}
+        transition={400}
+        sliderType={SliderType.BETWEEN}
+      />
     </div>
   );
 };

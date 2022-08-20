@@ -458,6 +458,11 @@
     redux-thunk "^2.4.1"
     reselect "^4.1.5"
 
+"@solid-primitives/keyed@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@solid-primitives/keyed/-/keyed-1.0.0.tgz#bd2fb64f90130b2d6a0523b9fa91d29873cc6077"
+  integrity sha512-9vznFq6xR1FLEcQH3S3aGZ3iWOY6EZmDEl0raNOXJxdgXnudHepcAOfx8G52bROHJ3AdPnIqv4ITIegPQOK2BA==
+
 "@solid-primitives/props@^2.1.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@solid-primitives/props/-/props-2.2.1.tgz#0883a69d5bbb0702bb29fcb5cb6804b83dda1a5e"

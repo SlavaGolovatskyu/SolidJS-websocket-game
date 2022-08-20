@@ -1,0 +1,30 @@
+.content {
+  width: 90%;
+  height: 90%;
+  margin: 0 auto;
+  background: yellow;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.content__title {
+  font-size: 24px;
+  line-height: 24px;
+  font-weight: 700;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.content__subtitle {
+  margin: 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.content__text {
+  letter-spacing: 1px;
+  padding: 0 25px;
+  text-align: center;
+}

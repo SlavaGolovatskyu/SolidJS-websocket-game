@@ -1,20 +1,30 @@
-import { createSignal, createEffect, batch, Show } from 'solid-js';
+import {
+  createSignal,
+  createEffect,
+  batch,
+  Show,
+  createMemo,
+} from 'solid-js';
+import { Rerun } from '@solid-primitives/keyed';
 
-import { Motion, Presence } from '@motionone/solid';
+import { Presence } from '@motionone/solid';
 
 import { Arrow } from '../Arrow/Arrow';
 import { ArrowDirections } from '../Arrow/models';
 import { CheckBoxCircle } from './components/circle';
+import { SliderCard } from './components/slider-card';
+
+import { SliderItem, SliderType } from './models/models';
 
 import styles from './slider.module.scss';
 
-type SliderItem = {
-  title: string;
-  subtitle: string;
-  text: string;
-};
+enum Directions {
+  RIGHT = 'right',
+  LEFT = 'left',
+}
 
 type SliderProps = {
+  sliderType?: SliderType;
   transition?: number;
   elements: SliderItem[];
 };
@@ -24,22 +34,39 @@ export const Slider = (props: SliderProps) => {
   const [isShow, setIsShow] = createSignal<boolean>(true);
   const [isCanSwipeToTheNext, setIsCanSwipeToTheNext] =
     createSignal<boolean>(true);
+  const [currentDirection, setCurrentDirection] =
+    createSignal<Directions | null>(null);
 
+  const isCurrentDirectionLeft = createMemo(() => {
+    return currentDirection() === Directions.LEFT;
+  });
+
+  const sliderType = props.sliderType || SliderType.BETWEEN;
   const transition = props.transition || 500;
+  const xRange = 100;
 
-  const transitionToPercentage = () => {
-    const toPercentage = 1000;
-    const animateTransition = transition / toPercentage;
-
-    return animateTransition;
-  };
+  const timeTransitionForCloseAndOpen = transition * 2;
+  const toPercentage = 1000;
+  const animateTransition = transition / toPercentage;
 
   createEffect(() => {
     if (!isShow()) {
       setTimeout(() => setIsShow(true), transition);
-      setTimeout(() => setIsCanSwipeToTheNext(true), transition * 2);
+      setTimeout(
+        () => setIsCanSwipeToTheNext(true),
+        timeTransitionForCloseAndOpen,
+      );
     }
   });
+
+  const test: null | Directions | object = {
+    current: { direction: null },
+  };
+
+  const hideSlide = () => {
+    setIsShow(false);
+    setIsCanSwipeToTheNext(false);
+  };
 
   const onLeftArrow = () => {
     if (!isCanSwipeToTheNext()) return;
@@ -51,8 +78,7 @@ export const Slider = (props: SliderProps) => {
         setCurrentSlideIdx(currentSlideIdx() - 1);
       }
 
-      setIsShow(false);
-      setIsCanSwipeToTheNext(false);
+      hideSlide();
     });
   };
 
@@ -66,19 +92,21 @@ export const Slider = (props: SliderProps) => {
         setCurrentSlideIdx(currentSlideIdx() + 1);
       }
 
-      setIsShow(false);
-      setIsCanSwipeToTheNext(false);
+      hideSlide();
     });
   };
 
   const onChangeNumberOfSlider = (index: number) => {
     if (!isCanSwipeToTheNext()) return;
     if (index === currentSlideIdx()) return;
+    if (sliderType === SliderType.BETWEEN) {
+      test.current.direction =
+        currentSlideIdx() < index ? Directions.RIGHT : Directions.LEFT;
+    }
 
     batch(() => {
       setCurrentSlideIdx(index);
-      setIsShow(false);
-      setIsCanSwipeToTheNext(false);
+      hideSlide();
     });
   };
 
@@ -88,38 +116,64 @@ export const Slider = (props: SliderProps) => {
         <div class={styles.left_arrow}>
           <Arrow
             direction={ArrowDirections.LEFT}
-            onClick={onLeftArrow}
+            onClick={() => {
+              if (sliderType === SliderType.BETWEEN) {
+                test.current.direction = Directions.LEFT;
+              }
+              onLeftArrow();
+            }}
           />
         </div>
         <div class={styles.right_arrow}>
           <Arrow
             direction={ArrowDirections.RIGHT}
-            onClick={onRightArrow}
+            onClick={() => {
+              if (sliderType === SliderType.BETWEEN) {
+                test.current.direction = Directions.RIGHT;
+              }
+              onRightArrow();
+            }}
           />
         </div>
       </Show>
-      <Presence exitBeforeEnter>
-        <Show when={isShow()}>
-          <Motion.div
-            animate={{ opacity: [0, 1], scale: [0, 1] }}
-            class={styles.content}
-            transition={{
-              duration: transitionToPercentage(),
-              easing: 'ease-in-out',
-            }}
-            exit={{ opacity: [1, 0], scale: [1, 0] }}>
-            <div class={styles.content__title}>
-              {props.elements[currentSlideIdx()]?.title}
-            </div>
-            <div class={styles.content__subtitle}>
-              {props.elements[currentSlideIdx()]?.subtitle}
-            </div>
-            <div class={styles.content__text}>
-              {props.elements[currentSlideIdx()]?.text}
-            </div>
-          </Motion.div>
-        </Show>
-      </Presence>
+      <Show when={sliderType === SliderType.CLOSE_AND_OPEN}>
+        <Presence exitBeforeEnter>
+          <Show when={isShow()}>
+            <SliderCard
+              slideData={props.elements[currentSlideIdx()]}
+              duration={animateTransition}
+            />
+          </Show>
+        </Presence>
+      </Show>
+      <Show when={sliderType === SliderType.BETWEEN}>
+        <Presence exitBeforeEnter>
+          <Rerun on={currentSlideIdx()}>
+            <SliderCard
+              slideData={props.elements[currentSlideIdx()]}
+              duration={animateTransition}
+              initial={{
+                opacity: 0,
+                x:
+                  test.current.direction === Directions.LEFT
+                    ? -xRange
+                    : xRange,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              exit={{
+                opacity: 0,
+                x:
+                  test.current.direction === Directions.LEFT
+                    ? xRange
+                    : -xRange,
+              }}
+            />
+          </Rerun>
+        </Presence>
+      </Show>
       <div class={styles.count_of_items}>
         {props.elements.map((_, index) => {
           const isSelected = currentSlideIdx() === index;
