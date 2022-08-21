@@ -1,5 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+
+import { persistActions } from 'src/helpers/persistActions';
 
 interface UserState {
   username: string;
@@ -27,12 +29,22 @@ export const userSlice = createSlice({
     connectToTheRoom: (state, action: PayloadAction<string>) => {
       state.currentRoom = action.payload;
     },
-    changeIsConnectedStatus: (state, action: PayloadAction<boolean>) => {
+    changeIsConnectedStatus: (
+      state,
+      action: PayloadAction<boolean>,
+    ) => {
       state.isConnected = action.payload;
-    }
-  }
-})
+    },
+  },
+});
 
-export const { changeUsername, connectToTheRoom, changeIsConnectedStatus } = userSlice.actions;
+export const {
+  changeUsername,
+  connectToTheRoom,
+  changeIsConnectedStatus,
+} = userSlice.actions;
+
+// Saved actions variables which we should save in localStorage
+persistActions([changeUsername, connectToTheRoom]);
 
 export default userSlice.reducer;
