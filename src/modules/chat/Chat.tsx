@@ -1,54 +1,32 @@
 import { Component } from 'solid-js';
-import type { JSX } from 'solid-js';
 
+import { Portal } from 'solid-js/web';
 import { styled } from 'solid-styled-components';
 
-import { changeUsername } from 'src/store/reducers/user';
+import {
+  CenteredBlock,
+  DisplayFlex,
+} from 'src/components/StyledComponents/Blocks/index';
+
+import { ChatStages } from 'src/store/reducers/chat';
 import useStore from 'src/hooks/useStore';
+import { Username } from './components/Username';
 
 const Chat: Component = () => {
-  const [currentStage, dispatch] = useStore(
+  const [currentStage] = useStore<ChatStages>(
     (state) => state.chat.currentStage,
   );
-  const [username] = useStore((state) => state.user.username);
-
-  const onChangeUsername: JSX.EventHandler<
-    HTMLInputElement,
-    InputEvent
-  > = (e) => {
-    dispatch(changeUsername(e.currentTarget.value));
-  };
 
   return (
     <>
-      <InputLabel
-        value={username()}
-        placeholder="Enter username"
-        onInput={onChangeUsername}
-      />
-      {username()}
+      {currentStage() === ChatStages.USERNAME && <Username />}
+      {currentStage() === ChatStages.CHOOSE_ROOM && (
+        <Portal>
+          <CenteredBlock>test</CenteredBlock>
+        </Portal>
+      )}
     </>
   );
 };
-
-const InputLabel = styled.input<{ isError?: boolean }>`
-  padding: 15px;
-  background: silver;
-  color: white;
-  border: 1px solid black;
-  border-radius: 20px;
-
-  ${(props) =>
-    props?.isError
-      ? `
-    border: 1px solid red;
-    color: red;
-  `
-      : ''}
-
-  &::placeholder {
-    color: ${(props) => (props?.isError ? 'red' : 'white')};
-  }
-`;
 
 export default Chat;

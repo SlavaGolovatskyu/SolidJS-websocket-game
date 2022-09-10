@@ -2,12 +2,12 @@ import { onCleanup, createSignal } from 'solid-js';
 import equal from 'fast-deep-equal';
 
 import store from '../store';
-import type { RootState } from '../store';
+import type { RootState, AppDispatch } from '../store';
 
-const useStore = (
+const useStore = <S = any>(
   select: (state: RootState) => unknown,
   equality: boolean = true,
-): any[] => {
+) => {
   const [selected, setSelected] = createSignal(
     select(store.getState()),
   );
@@ -26,7 +26,7 @@ const useStore = (
 
   onCleanup(() => unsubscribe());
 
-  return [selected, store.dispatch];
+  return [selected, store.dispatch] as [() => S, AppDispatch];
 };
 
 export default useStore;

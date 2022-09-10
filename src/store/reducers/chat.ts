@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum ChatStages {
   USERNAME = 'username',
@@ -30,9 +30,9 @@ export const chatSlice = createSlice({
     },
     changeRoomId: (state, action: PayloadAction<string>) => {
       state.roomId = action.payload;
-    }
-  }
-})
+    },
+  },
+});
 
 export const { changeRoomId, changeCurrentStage } = chatSlice.actions;
 

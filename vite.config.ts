@@ -4,9 +4,12 @@ import solidPlugin from 'vite-plugin-solid';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [solidPlugin(), tsconfigPaths({
-    projects: ['./tsconfig.json'],
-  })],
+  plugins: [
+    solidPlugin(),
+    tsconfigPaths({
+      projects: ['./tsconfig.json'],
+    }),
+  ],
   server: {
     port: 3000,
   },
@@ -15,5 +18,5 @@ export default defineConfig({
   },
   resolve: {
     alias: { src: path.resolve('src/') },
-  }
+  },
 });
