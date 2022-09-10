@@ -19,7 +19,3 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;
-
-// We're just calling this function for filling data which saved in localStorage
-// Also the main thing, we should call this function after initializing redux store
-getFromStorageAndSetInRedux();
