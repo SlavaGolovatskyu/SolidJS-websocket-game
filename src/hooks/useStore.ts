@@ -5,10 +5,10 @@ import store from '../store';
 import type { RootState, AppDispatch } from '../store';
 
 const useStore = <S = any>(
-  select: (state: RootState) => unknown,
+  select: (state: RootState) => S,
   equality: boolean = true,
 ) => {
-  const [selected, setSelected] = createSignal(
+  const [selected, setSelected] = createSignal<S>(
     select(store.getState()),
   );
 
@@ -16,11 +16,11 @@ const useStore = <S = any>(
     const updateSelected = select(store.getState());
 
     if (!equality) {
-      setSelected(updateSelected);
+      setSelected(updateSelected as any);
     }
 
     if (equality && !equal(selected(), updateSelected)) {
-      setSelected(updateSelected);
+      setSelected(updateSelected as any);
     }
   });
 

@@ -1,6 +1,18 @@
 import { styled } from 'solid-styled-components';
 
-export const CenteredBlock = styled.div`
+export const CenteredBlock = styled.div<{
+  display?: string;
+  width?: string;
+  height?: string;
+  margin?: string;
+  padding?: string;
+}>`
+  ${(props) => (props?.width ? `width: ${props.width};` : '')}
+  ${(props) => (props?.height ? `height: ${props.height};` : '')}
+  ${(props) => (props?.display ? `display: ${props.display};` : '')}
+  ${(props) => (props?.margin ? `margin: ${props.margin};` : '')}
+  ${(props) => (props?.padding ? `padding: ${props.padding};` : '')}
+
   position: absolute;
   top: 50%;
   left: 50%;
