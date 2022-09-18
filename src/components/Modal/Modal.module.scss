@@ -1,4 +1,17 @@
 .modal__block {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(180deg, #eff2fb 0%, #eff2fb 100%);
+  width: 60%;
   margin: 0 auto;
-  background: red;
+  height: 50%;
+  top: 25%;
+  border-radius: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

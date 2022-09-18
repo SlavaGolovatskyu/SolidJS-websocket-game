@@ -1,21 +1,23 @@
 import useStore from 'src/hooks/useStore';
 
-import { createMemo, JSX } from 'solid-js';
+import { createMemo, JSX, Component } from 'solid-js';
 
 import { styled } from 'solid-styled-components';
 
 import { changeUsername } from 'src/store/reducers/user';
-import { changeCurrentStage } from 'src/store/reducers/chat';
 
 import {
   CenteredBlock,
   DisplayFlex,
 } from 'src/components/StyledComponents/Blocks';
 
-import { ChatStages } from 'src/store/reducers/chat';
 import { MIN_USERNAME_LENGTH } from '../models';
 
-export const Username = () => {
+interface UsernameProps {
+  onNextStage: () => void;
+}
+
+export const Username: Component<UsernameProps> = (props) => {
   const [username, dispatch] = useStore<string>(
     (state) => state.user.username,
   );
@@ -31,9 +33,6 @@ export const Username = () => {
 
   const clearUsername = () => dispatch(changeUsername(''));
 
-  const toChooseRoomStage = () =>
-    dispatch(changeCurrentStage(ChatStages.CHOOSE_ROOM));
-
   return (
     <CenteredBlock>
       <DisplayFlex flexDirection="column" gap="15px">
@@ -47,7 +46,7 @@ export const Username = () => {
           X
         </StyledLabel>
         <Button
-          onClick={toChooseRoomStage}
+          onClick={props.onNextStage}
           disabled={isNextStageOpened()}
         >
           Next step

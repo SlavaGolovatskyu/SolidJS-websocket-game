@@ -1,12 +1,5 @@
 import { Component, createSignal } from 'solid-js';
 
-import { Portal } from 'solid-js/web';
-
-import {
-  CenteredBlock,
-  DisplayFlex,
-} from 'src/components/StyledComponents/Blocks/index';
-
 import { ChatStages } from 'src/store/reducers/chat';
 import useStore from 'src/hooks/useStore';
 import { Username } from './components/Username';
@@ -16,20 +9,23 @@ const Chat: Component = () => {
   const [currentStage] = useStore<ChatStages>(
     (state) => state.chat.currentStage,
   );
-  const [modalIsOpen, setModalIsOpen] = createSignal(true);
+  const [modalIsOpen, setModalIsOpen] = createSignal(false);
 
   const onCloseModal = () => setModalIsOpen(false);
+  const joinToTheRoom = () => setModalIsOpen(true);
 
   return (
     <>
-      {currentStage() === ChatStages.USERNAME && <Username />}
+      <Username onNextStage={joinToTheRoom} />
+      <Modal close={onCloseModal} isOpened={modalIsOpen} withCloseIcon>
+        <div>11111111 22222222 333333333 44444444</div>
+      </Modal>
+      {/* {currentStage() === ChatStages.USERNAME && <Username />}
       {currentStage() === ChatStages.CHOOSE_ROOM && (
         <Modal close={onCloseModal} isOpened={modalIsOpen}>
-          <div>
-            ahahahahaahahahahahaahahahahahaahahahahahaahahahahahaah
-          </div>
+          <div>11111111 22222222 333333333 44444444</div>
         </Modal>
-      )}
+      )} */}
     </>
   );
 };

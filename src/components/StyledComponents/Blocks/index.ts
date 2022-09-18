@@ -6,6 +6,7 @@ export const CenteredBlock = styled.div<{
   height?: string;
   margin?: string;
   padding?: string;
+  position?: string;
 }>`
   ${(props) => (props?.width ? `width: ${props.width};` : '')}
   ${(props) => (props?.height ? `height: ${props.height};` : '')}
@@ -13,7 +14,7 @@ export const CenteredBlock = styled.div<{
   ${(props) => (props?.margin ? `margin: ${props.margin};` : '')}
   ${(props) => (props?.padding ? `padding: ${props.padding};` : '')}
 
-  position: absolute;
+  position: ${(props) => props.position || 'absolute'};
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
