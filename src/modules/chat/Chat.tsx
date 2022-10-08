@@ -3,6 +3,7 @@ import { Component, createSignal } from 'solid-js';
 import { ChatStages } from 'src/store/reducers/chat';
 import useStore from 'src/hooks/useStore';
 import { Username } from './components/Username';
+import { JoinToTheRoom } from './components/JoinToTheRoom';
 import Modal from 'src/components/Modal/Modal';
 
 const Chat: Component = () => {
@@ -16,16 +17,12 @@ const Chat: Component = () => {
 
   return (
     <>
-      <Username onNextStage={joinToTheRoom} />
+      {currentStage() === ChatStages.USERNAME && (
+        <Username onNextStage={joinToTheRoom} />
+      )}
       <Modal close={onCloseModal} isOpened={modalIsOpen} withCloseIcon>
-        <div>11111111 22222222 333333333 44444444</div>
+        <JoinToTheRoom />
       </Modal>
-      {/* {currentStage() === ChatStages.USERNAME && <Username />}
-      {currentStage() === ChatStages.CHOOSE_ROOM && (
-        <Modal close={onCloseModal} isOpened={modalIsOpen}>
-          <div>11111111 22222222 333333333 44444444</div>
-        </Modal>
-      )} */}
     </>
   );
 };

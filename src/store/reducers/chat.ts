@@ -3,7 +3,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum ChatStages {
   USERNAME = 'username',
-  CHOOSE_ROOM = 'choose-room',
   ROOM = 'room',
 }
 

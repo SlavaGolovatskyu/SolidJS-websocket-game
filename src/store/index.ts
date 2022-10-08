@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import saveToLocalStorageMiddleware from './middleware/saveToLocalStorage';
-import { getFromStorageAndSetInRedux } from 'src/hooks/useReduxLocalStorage';
+import createSagaMiddleware from 'redux-saga';
 
 import userReducer from './reducers/user';
 import chatReducer from './reducers/chat';
+
+const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer: {
@@ -12,7 +14,10 @@ const store = configureStore({
     chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(saveToLocalStorageMiddleware),
+    getDefaultMiddleware().concat([
+      sagaMiddleware,
+      saveToLocalStorageMiddleware,
+    ]),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

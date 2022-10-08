@@ -11,6 +11,7 @@ import {
   DisplayFlex,
 } from 'src/components/StyledComponents/Blocks';
 
+import { InputLabel } from './InputLabel';
 import { MIN_USERNAME_LENGTH } from '../models';
 
 interface UsernameProps {
@@ -93,35 +94,5 @@ const Button = styled.button`
 
   &:disabled {
     background: silver;
-  }
-`;
-
-const InputLabel = styled.input<{ isError?: boolean }>`
-  padding: 15px;
-  background: #3a79ff;
-  color: white;
-  border: 1px solid black;
-  border-radius: 10px;
-  width: 240px;
-  position: relative;
-
-  ${(props) =>
-    props?.isError
-      ? `
-    border: 1px solid red;
-    color: red;
-  `
-      : ''}
-
-  &:focus {
-    &::placeholder {
-      font-size: 12px;
-      position: absolute;
-      top: 2px;
-    }
-  }
-
-  &::placeholder {
-    color: ${(props) => (props?.isError ? 'red' : 'white')};
   }
 `;

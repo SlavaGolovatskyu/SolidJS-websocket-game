@@ -18,7 +18,7 @@ interface MouseEventWithPath extends MouseEvent {
 interface ModalProps {
   close: () => void;
   isOpened: () => boolean;
-  children?: JSX.Element;
+  children: JSX.Element;
   animate?: VariantDefinition;
   initial?: VariantDefinition;
   exit?: VariantDefinition;
@@ -99,6 +99,11 @@ const Modal: Component<ModalProps> = (props) => {
           </Motion.div>
         </Show>
       </Presence>
+      <Show when={props.isOpened()}>
+        <div>
+          <div class={style.backdrop}></div>
+        </div>
+      </Show>
     </>
   );
 };
