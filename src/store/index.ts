@@ -18,6 +18,7 @@ const store = configureStore({
       sagaMiddleware,
       saveToLocalStorageMiddleware,
     ]),
+  devTools: import.meta.env.SOLID_NODE_ENV !== 'production',
 });
 
 export type RootState = ReturnType<typeof store.getState>;
